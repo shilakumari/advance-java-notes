@@ -1,0 +1,185 @@
+Spring Framework - Goals
+Build a Loose Coupled application with Modern Spring Approach
+Terminology
+	Tight Coupling and Loose Coupling
+	IOC Container
+	Application Context
+	Component Scan
+	Dependency Injection
+	Spring Beans
+	Auto Wiring
+
+Loose Coupling with Spring Framework
+	Design Game Runner to run games:
+		Mario, Super Contra, PacMan etc
+	Iteration 1: Tightly Coupled
+		GameRunner class
+		Game classes: Mario, Super Contra, PacMan etc
+	Iteration 2: Loose Coupling - Interfaces
+		GameRunner class
+		GamingConsole interface
+			Game classes: Mario, Super Contra, PacMan etc
+	Iteration 3: Loose Coupling - Spring
+	Spring framework will manage all our objects!
+		GameRunner class
+		GamingConsole interface
+			Game classes: Mario, Super Contra, PacMan etc
+
+
+Advantages of Spring Framework: 
+	Loosely Coupled Code (Focus on Business Logic), Architectural Flexibility and Evolution with time!
+
+
+Spring Framework - Important Terminology
+	@Component (..): Class managed by Spring framework
+	Dependency: GameRunner needs GamingConsole impl!
+		GamingConsole Impl (Ex: MarioGame) is a dependency of GameRunner
+	Component Scan: How does Spring Framework find component classes?
+		It scans packages! (@ComponentScan("com.in28minutes"))
+	Dependency Injection: Identify beans, their dependencies and wire them together (provides IOC - Inversion of Control)
+		Spring Beans: An object managed by Spring Framework
+		IoC container: Manages the lifecycle of beans and dependencies
+			Types: ApplicationContext (complex), BeanFactory (simpler features - rarely used)
+		Autowiring: Process of wiring in dependencies for a Spring Bean
+
+
+Question 1: Does the Spring Framework really add value?
+Answer: 
+Real World applications are much more complex:
+	Multiple Layers (Web, Business, Data etc)
+	Each layer is dependent on the layer below it!
+		Example: Business Layer class talks to a Data Layer class
+			Data Layer class is a dependency of Business Layer class
+		There are thousands of such dependencies in every application!
+With Spring Framework:
+	INSTEAD of FOCUSING on objects, their dependencies and wiring 
+		You can focus on the business logic of your application!
+	Spring Framework manages the lifecycle of objects:
+		Mark components using annotations: @Component (and others..)
+		Mark dependencies using @Autowired
+		Allow Spring Framework to do its magic!
+	Ex: Controller > BusinessService (sum) > DataService (data)!
+
+
+Question 2: How is Spring JAR downloaded? (Maven)
+Answer:
+	What happens if you manually download Spring JAR?
+		Remember: Spring JAR needs other JARs
+		What if you need to upgrade to a new version?
+	Maven: Manage JARs needed by apps (application dependencies)
+		Once you add a dependency on Spring framework, Maven would download:
+			Spring Framework and its dependencies
+	All configuration in pom.xml
+		Maven artifacts: Identified by a Group Id, an Artifact Id.
+	Important Features:
+		Defines a simple project setup that follows best practices
+		Enables consistent usage across all projects
+		Manages dependency updates and transitive dependencies
+	Terminology Warning: Spring Dependency vs Maven Dependency
+
+
+Spring - Dependency Injection Types
+	Constructor-based : Dependencies are set by
+		creating the Bean using its Constructor
+	Setter-based : Dependencies are set by calling
+		setter methods on your beans
+	Field: No setter or constructor. Dependency is injected using reflection.
+Which one should you use?
+	Spring team recommends Constructor-based injection as dependencies are automatically set when an object is created.
+
+
+Spring Modules
+	Core: IoC Container etc
+	Testing: Mock Objects, Spring MVC Test etc
+	Data Access: Transactions, JDBC, JPA etc
+	Web Servlet: Spring MVC etc
+	Web Reactive: Spring WebFlux etc
+	Integration: JMS etc
+Each application can choose the modules they want to make use of
+They do not need to make use of all things everything in Spring framework.
+
+
+Spring Projects
+Spring keeps evolving (REST API > Microservices > Cloud)
+	Spring Boot: Most popular framework to build microservices
+	Spring Cloud: Build cloud native applications
+	Spring Data: Integrate the same way with different types of databases : NoSQL and Relational
+	Spring Integration: Address challenges with integration with other applications
+	Spring Security: Secure your web application or REST API or microservice
+
+
+Question 3: Why is Spring Popular?
+Answer:
+	Loose Coupling: Spring manages beans and dependencies
+		Make writing unit tests easy!
+		Provides its own unit testing project - Spring Unit Testing
+	Reduced Boilerplate Code: Focus on Business Logic
+		Example: No need for exception handling in each method!
+			All Checked Exceptions are converted to Runtime or Unchecked Exceptions
+	Architectural Flexibility: Spring Modules and Projects
+		You can pick and choose which ones to use (You DON'T need to use all of them!)
+	Evolution with Time: Microservices and Cloud 
+		Spring Boot, Spring Cloud etc.
+
+
+Spring Boot Starter Projects
+	Goal of Starter Projects: Help you get a project up and running quickly!
+		Web Application - Spring Boot Starter Web
+		REST API - Spring Boot Starter Web
+		Talk to database using JPA - Spring Boot Starter Data JPA
+		Talk to database using JDBC - Spring Boot Starter JDBC
+		Secure your web application or REST API - Spring Boot Starter Security
+	Manage list of maven dependencies and versions for different kinds of apps:
+		Spring Boot Starter Web: Frameworks needed by typical web applications
+			spring-webmvc, spring-web, spring-boot-starter-tomcat, spring-boot-starter-json
+
+
+Spring Boot embedded servers
+How do you deploy your application?
+	Step 1: Install Java
+	Step 2: Install web/Application server
+		Tomcat/WebShere/WebLogic etc
+	Step 3:	Deploy the application WAR(Web Archive)
+		This is the old WAR approach, complex to setup
+Embedded Server - Simple alternative
+	Step 1: Install Java
+	Step 2: Run JAR file
+	Embedded Server examples:
+		spring-boot-starter-tomcat
+		spring-boot-starter-jetty
+		spring-boot-starter-undertow
+	
+
+More Spring Boot Features
+  Spring Boot DevTools: Increase developer productivity
+    No need to restart the server for every code change.
+
+  Spring Boot Actuator: Monitor and manage your application in your production
+    Provides a number of endpoints:
+  beans - Complete list of Spring beans in your app
+  health - Application health information
+  metrics - Application metrics
+  mappings - Details around Request Mappings
+
+
+Spring Boot Actuator
+Actuator dependency:
+  <dependency>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-actuator</artifactId>
+	</dependency>
+	for actuator url as: localhost:8080/actuator
+To enable all actuator endpoints:
+	In application.properties	
+		management.endpoints.web.exposure.include = *
+
+
+Spring Boot Devtools
+dependency:
+	<dependency>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-devtools</artifactId>
+	</dependency>
+: Server autometically restarted, if we make changes in Java files.
+Advantages:
+Increase productivity and save lot of time.
