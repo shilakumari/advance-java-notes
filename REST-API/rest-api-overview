@@ -1,0 +1,164 @@
+REST API
+	Architectural Style for the Web
+	Resource: Any information (Example: Courses)
+	URI: How do you identify a resource? (/courses, /courses/1)
+
+	You can perform actions on a resource (Create/Get/Delete/Update). Different HTTP Request
+	Methods are used for different operations:
+		GET - Retrieve information (/courses, /courses/1)
+		POST - Create a new resource (/courses)
+		PUT - Update/Replace a resource (/courses/1)
+		PATCH - Update a part of the resource (/courses/1)
+		DELETE - Delete a resource (/courses/1)
+
+	Representation: How is the resource represented? (XML/JSON/Text/Video etc..)
+	Server: Provides the service (or API)
+	Consumer: Uses the service (Browser or a Front End Application)
+
+
+REST Client
+: Talend API Tester
+: Goto browser, search 'Talend API Tester', click on first link.
+	Then save extension of 'Talend API Tester' to the Browser.
+
+By browser we can only use for GET.
+By using REST Client, we can perform operation as POST, PUT, DELETE etc on resources.
+
+
+JDBC to Spring JDBC to JPA to Spring Data JPA
+	JDBC
+		Write a lot of SQL queries!
+		And write a lot of Java code
+	Spring JDBC
+		Write a lot of SQL queries
+		BUT lesser Java code
+	JPA
+		Do NOT worry about queries
+		Just Map Entities to Tables!	
+	Spring Data JPA
+		Let's make JPA even more simple!
+		I will take care of everything!
+
+
+Spring Boot Auto Configuration Magic - Data JPA
+Data JPA and H2 dependencies:
+	Spring Boot Auto Configuration does some magic:
+		Initialize JPA and Spring Data JPA frameworks
+		Launch an in memory database (H2)
+		Setup connection from App to in-memory database
+		Launch a few scripts at startup (example: data.sql)
+	Remember: 
+		H2 is in memory database
+		Does NOT persist data
+		Great for learning
+		BUT NOT so great for production
+
+
+(1.) Database H2
+H2: In-memory database.
+	That means data is temporary.
+	When restart the application, all the data inside the application is lost.
+
+Able to talk to database:
+	<dependency>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-data-jpa</artifactId>
+	</dependency>
+TO use H2 database:
+	<dependency>
+		<groupId>com.h2database</groupId>
+		<artifactId>h2</artifactId>
+	</dependency>
+
+If don't want the database to be included as part of the jar, then set scope as runtime.
+	<dependency>
+		<groupId>com.h2database</groupId>
+		<artifactId>h2</artifactId>
+		<scope> runtime</scope>
+	</dependency>
+	
+
+When we restart the application, In the log we can see that H2 database is started up.
+And database available at specific random id.
+If don't want to use random id to connect to the database, then let's take static thing.
+	spring.datasource.url = jdbc:h2:mem:testdb
+To run on browser:
+	localhost:8080/h2-console
+
+If using >=2.5.0 Release of Spring Boot, then configure this in application.properties.
+	spring.jpa.defer-datasource-initialization = true
+
+
+(2.) Database MySQL
+
+	Step 1: Add dependency
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+		<dependency>
+	
+	Step 2: In application.properties specify spring url, username, password, driver-class-name etc
+		spring.jpa.hibernate.ddl-auto=update
+		spring.datasource.url=jdbc:mysql://${MYSQL_HOST:localhost}:3306/rest_api_byin28minutes
+		spring.datasource.username=root
+		spring.datasource.password=root
+		spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+		spring.jpa.database-platform=org.hibernate.dialect.MySQL8Dialect
+		spring.jpa.show-sql: true
+
+	Step 3: create untitle file and save as data.sql in 
+			src> main> resources> data.sql 		
+
+	Step 4: Configure data.sql in application.properties file 
+		spring.datasource.data=classpath:data.sql
+		spring.datasource.initialization-mode=always
+	
+
+
+CREATING REPOSITORY to manage enity and integrating with GET REST API
+:
+To manage Entity, we use 'Spring Data JPA' concept called 'Repository'.
+Create Repository as Interface by extending 'JpaRepository' inteface.
+
+If extending 'JpaRepository', we need to specify something as
+	JpaRepository<Entity , Id Type>.
+
+Exmaple:
+	public interface CourseRepository extends JpaRepository<Course, Long>{
+	}
+
+Note:
+Entity should have default constructor.
+The default http method is GET.
+
+
+On Browser
+http://localhost:8099/courses > right click > inspect
+	> network 
+ refresh page 
+	> network > all 
+		> name
+ 		course		
+			request headers(5)
+			response headers(14)
+
+	now, we got the how many times request and response happened in the browser.
+
+
+Spring Data JPA
+Methods
+(Those are provided by jpa repository)
+	findAll()
+		: To get all data of particular Entity/Table.
+	findById(id)
+		: To get data by id.
+	save()
+		: To save/insert data in database.
+		: To update data in database, If particular Entity is not present in db, it could be inserted.
+To read data from database - GET
+	repository.findAll();
+	repository.findById(courseId);
+To insert data in database - POST
+	repository.save(course);
+To update data in database - PUT
+	repository.save(course);
