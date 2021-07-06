@@ -1,0 +1,42 @@
+Docker
+: You'd want to install MySQL database on our machine. You'd want to able to use MySQL and have our application connected to MySQL database. 
+
+One of the option we have to directly download MySQL and install it on your local machine. That's the traditional approach.
+However in the last few years, Docker has become really popular, and can lounch MySQL database very very easly using Docker.
+
+1. Installing Docker
+
+2. Docker and MySQL Configuration
+	Launch MySQL using Docker
+		docker run --detach --env MYSQL_ROOT_PASSWORD=dummypassword --env MYSQL_USER=courses-user --env MYSQL_PASSWORD
+			=dummycourses --env MYSQL_DATABASE=courses --name mysql --publish 3306:3306 mysql:5.7
+
+	application.properties configuration
+		spring.jpa.hibernate.ddl-auto=update
+		spring.datasource.url=jdbc:mysql://localhost:3306/courses
+		spring.datasource.username=courses-user
+		spring.datasource.password=dummycourses
+		spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL58Dialect
+ 		#courses-user@localhost:3306
+ 
+	mysqlsh commands
+		mysqlsh
+		\connect courses-user@localhost:3306
+		\sql
+		use courses
+		select * from course;
+		\quit
+	
+
+	Docker Commands
+		docker container ls
+		docker container stop ID
+
+
+/	docker run --detach 
+//	--env MYSQL_ROOT_PASSWORD=dummypassword 
+//	--env MYSQL_USER=courses-user 
+//	--env MYSQL_PASSWORD=dummycourses 
+//	--env MYSQL_DATABASE=courses 
+//	--name mysql
+//	--publish 3306:3306 mysql:5.7
