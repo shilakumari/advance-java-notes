@@ -1,4 +1,6 @@
 REST API
+https://github.com/in28minutes/spring-web-services/tree/master/restful-web-services
+	
 	Architectural Style for the Web
 	Resource: Any information (Example: Courses)
 	URI: How do you identify a resource? (/courses, /courses/1)
